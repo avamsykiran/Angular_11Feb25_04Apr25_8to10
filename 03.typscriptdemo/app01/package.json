@@ -1,0 +1,17 @@
+{
+  "name": "app01",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app",
+    "build": "npx tsc"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "typescript": "^5.7.3"
+  }
+}
