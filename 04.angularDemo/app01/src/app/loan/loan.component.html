@@ -1,0 +1,22 @@
+<section class="box">
+    <form>
+        <div>
+            <label>Loan Amount</label>
+            <input type="number" name="tb1" [(ngModel)]="loanAmount" />
+        </div>
+        <div>
+            <label>Rate Of Interest</label>
+            <input type="number" name="tb2" [(ngModel)]="rateOfInterest" />
+        </div>
+        <div>
+            <label>Tennure</label>
+            <input type="number" name="tb3" [(ngModel)]="tennure" />
+        </div>
+    </form>
+
+    <hr />
+    <div>
+        <p>Simple Interest is <strong> {{(loanAmount*tennure*rateOfInterest)/100.0}} </strong> </p>
+        <p>Total Amount to be paid is <strong> {{ loanAmount + (loanAmount*tennure*rateOfInterest)/100.0}} </strong> </p>
+    </div>
+</section>
