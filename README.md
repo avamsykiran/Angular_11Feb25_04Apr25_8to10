@@ -422,4 +422,84 @@ Angular
         the .css files of this library msut be added to the 'styles' section of angular.json file
         the .js files of this library msut be added to the 'scripts' section of angular.json file
 
-    
+    Angular Routing
+    -----------------------------------------------------------------------
+
+        Routing is to map a component to a url, and render the mapped component only
+        when its url is requested.
+
+        Angular provides RouterModule for this priupose.
+
+        RouterModule
+
+            Route               object      {
+                                                path:'urlToBeMapped',
+                                                pathMatch:'startsWith|full'
+                                                component:Component,
+                                                redirectTo:''
+                                                children:][],
+                                                loadChildren :  lazyLoadingFunction,
+                                                canActive: routerGuardArray,
+                                                canLoad: routerGuardArray,
+                                                canDeactive: routerGuardArray,
+                                            }
+
+            Routes              Route[]
+
+            Router              buitl-in service used to navigate progrmatically
+                                navigate("url");
+                                navigateTo(["segment1","segment2"]);
+
+            ActivatedRoute      built-in service used to read url-paramter, or url related
+                                data like path, querystring ..etc.,
+
+            RouterLink          built-in directive to be used on 'a' element instead of its href
+
+            RouterLinkActive    built-in directive to be used on 'a' element to apply a css-class 
+                                only when a link is visited
+
+            RouterOutlet        built-in component that reserve place on the layout, to be
+                                replaced by the mapped component of the current url.
+
+    Angular Flow Controls
+    -----------------------------------------------------------------------
+
+        Legacy Directives from CommonsModule
+            NgIf
+            NgFor
+            NgSwitch    NgSwtichCase    NgDefault
+
+        Modern Flow Controls
+            are built-in angular native controls that need to additonal improts to use
+
+            @if(cond) {
+                //html dom
+            } @else {
+                //alternate html dom
+            }
+
+            @switch(exp){
+                @case (case1) {
+                    //html dom if exp===case1
+                }
+                @case (case2) {
+                    //html dom if exp===case2
+                }
+                @default {
+                    //html dom for default senario
+                }
+            }
+
+            @for(loopingVar of array; track $index){
+                //html dom we wnat to repeat one for each value in the array
+            }@empty{
+                //html dome that shall render incase the array is empty
+            }
+
+            variables injectable by for
+            $index      the index of the current element
+            $even       is the current element index is even
+            $odd        is the current element index is odd
+            $first      is the current element index is the first
+            $last       is the current element index is the last
+            $count      the number of elements that are iterated over .
