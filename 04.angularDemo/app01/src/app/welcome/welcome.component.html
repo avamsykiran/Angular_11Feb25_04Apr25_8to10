@@ -1,4 +1,8 @@
 <section class="box">
+    <div>
+        <img [src]="banners[bIndex]" [style.width.px]="bWidth" (click)="changeIndex()" [ngClass]="bClasses" />
+    </div>
+
     <p>
         Hello <strong>{{userName}}</strong>!
         Hope you are doing well. We are happy to welcome to our new angular SPA.
@@ -7,6 +11,20 @@
     <hr />
 
     <form>
+        <div>
+            <label> Banner Width:   
+                <input type="range" name="r1" [(ngModel)]="bWidth" min="100" max="500" />
+                {{bWidth}} px
+            </label>
+            <label> 
+                <input type="checkbox" name="cb1" [(ngModel)]="bClasses.centered" />
+                Align Center
+            </label>
+            <label> 
+                <input type="checkbox" name="cb2" [(ngModel)]="bClasses.bordered" />
+                Apply Border
+            </label>
+        </div>
         <div>
             <label>Your Name Please: </label>
             <input name="tb1" [(ngModel)]="userName" />

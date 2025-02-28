@@ -315,3 +315,111 @@ Angular
                 <input [(ngModel)]="field" />
 
             One-Way Data Binding
+                is to bind a field or method on to non-editable attributes of dom.
+
+                Attribute Binding
+                    is to bind a field with a attribute of an element.
+
+                    <tagName [attribute]="angularExpression"> content </tagName>
+
+                    <p title="this is a para"> This is a para </p> <!- this is not binding -->
+                    
+                    <p [title]="paraTitle"> This is a para </p> <!- this is binding the value of 'paratitle' -->
+
+                Event Bidning
+                    is to bind a method to an event directives
+
+                    Event-Driectives are built-in Angular defiend attributes to handle events.
+
+                        click
+                        dblClick
+                        focus
+                        change
+                        blur
+                        ngSubmit
+                        mouseover
+                        mouseup
+                        mousedown
+                        ...etc.. (its 'on' word removed from html-event-attributes)
+
+                    <tagName (eventDirective)="method()"> content </tagName>
+
+                    <button type="button" (click)="doSomething()"> clicke me </button>
+
+                Style Binding
+
+                    is to bind a field with a css-property or 'ngStyle' directive.
+
+                    <tagNAme [style.cssProperty]="angularExpression"> content </tagName>
+
+                    <p [style.textAlign]="myTextalignField"> content </p>
+                    
+                    <tagNAme [ngStyle]="aJsonObject"> content </tagName>
+
+                    @Component({ .. })
+                    class MyComponent {
+                        myParaStyle:any;
+
+                        construcotr(){
+                            this.myParaStyle = {border:"1px solid black",textAlign:"right"};
+                        }
+                    }
+                    
+                    <p [ngStyle]="myParaStyle"> content </p>
+
+                Class Binding
+
+                    is to bind a field to eh 'class' attribute of an element.
+                    this allows the dev to add or remove css-class dynamically.
+
+                    <tagNAme [class.className]="boolenaAngularExpression"> content </tagName>
+
+                    @Component({ .. })
+                    class MyComponent {
+                        isImportant:boolean
+
+                        construcotr(){
+                            this.isImportant = true;
+                        }
+                    }
+
+                    <p [class.important]="isImportant"> This is a para </p>
+
+                    <tagNAme [ngClass]="anArrayOfClassesOraJsonObj"> content </tagName>
+
+                    @Component({ .. })
+                    class MyComponent {
+                        myParaClasses:string[];
+
+                        construcotr(){
+                            this.myParaClasses=["importnat","highlight"];
+                        }
+                    }
+
+                    <p [ngClass]="myParaClasses"> This is a para </p>
+
+                    @Component({ .. })
+                    class MyComponent {
+                        myParaClasses:any;
+
+                        construcotr(){
+                            this.myParaClasses={importnat:true,highlight:false};
+                        }
+                    }
+
+                    <p [ngClass]="myParaClasses"> This is a para </p>
+
+    Integrating Bootstrap
+    -----------------------------------------------------------------------
+
+        bootstrap is a css-js library that offers responsive web design.
+        bootstrap-icons is a css library that offers icons.
+
+        npm i bootstrap bootstrap-icons
+
+        these are installed in the node_modules folder.
+
+        the .css files of this library msut be added to the 'styles' section of angular.json file
+        the .js files of this library msut be added to the 'scripts' section of angular.json file
+
+    
