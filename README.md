@@ -503,3 +503,143 @@ Angular
             $first      is the current element index is the first
             $last       is the current element index is the last
             $count      the number of elements that are iterated over .
+    
+    Inter Component Communication via @Input decorator
+    ----------------------------------------------------------------------------
+
+        When a parent component has to share some object with a child component, it does it
+        through attributes, An attribute of a component is a field of the component class marked with
+        @Input decorator.
+
+        navbar.component.ts
+        -----------------------------
+        @Component({
+            selector:"nav-bar",
+            ....
+        })
+        class NavBar {
+            @Input()
+            title!:string;
+        }
+
+        app.component.html
+        --------------------------------------------
+        <nav-bar title="title can be passed here"></nav-bar>
+        <nav-bar [title]="aVariableFromParentComponent"></nav-bar>
+
+    Angular LifeCycle Hooks
+    --------------------------------------------------------------------------
+
+        a lifecyle hook is a method that get invoked automatically at a spacific stage of
+        a component or directives's lifecycle.
+
+        constructor()
+            ↓
+            ngOnChanges() from OnChanges       /* is to detect any chagnes that may occur on @input */
+                ↓
+                ngOnInit() from OnInit          /* is used to excute a task after the component is 
+                    |                             loaded  initially */
+                    ↓
+                    ngOnChanges() from OnChanges   /* invokes everytime when a change occur on @input */
+                        ↓
+                        ngDoCheck()                /* is sued to detect any chagnews that angular couldn't */
+                            ↓
+                            ngAfterContentInit()                
+                                ↓
+                                ngAfterContentChecked()                
+                                    ↓
+                                    ngAfterViewInit()                
+                                        ↓
+                                        ngAfterViewChecked()                
+                                            |
+                                            ...... /*once the component is closed or removred */
+                                            ↓
+                                            ngOnDestroy()
+
+        @Component({
+            selector:"dashboard",.....
+        })
+        class Dashboard {
+            /*....*/            
+        }
+
+        dashboard template
+            <section>
+                <h3>Some heading</h3>
+            </section>
+
+        app component template
+            <dashboard>
+                <nav>
+                </nav>
+            </dashboard>
+
+        View        is any dom declared in the template of the component
+
+                    the section and the h3 are said to be the view 
+                    we can access these in the dashboard component class using
+                    @ViewChild decorator
+
+        Content     is any dom passed to the body of a component
+        
+                    the nav is called the content.        
+                    we can access these in the dashboard component class using
+                    @ContentChild decorator
+
+    Angular Directives
+    --------------------------------------------------------------------
+
+        A directive is any angular defined element or attribute.
+
+        Types Of Directives
+            (a) Component Directives    are otherwise called Components - angular defiend elements
+
+            (b) Structural Directives   are used to control the appearence of an element
+                                        NgIf, NgFor, NgSwitch
+
+            (c) Attribute Directives    are angular defiend attributes
+
+                builtin attribute directives like NgModel, NgStyle, NgClass ...etc.,
+
+                we can create a custom attribute directive as well
+
+                ng g directive DirectiveName --skip-tests
+
+                @Directive({
+                    selector:"[attribute-name]"
+                })
+                class DirectiveName {
+
+                }
+    
+    Angular Pipes
+    -----------------------------------------------------------
+
+        A pipe is used to tranform a value into another at the time of rendering.
+
+        syntax: {{ value|piprName:inputs }}
+
+        Built-In Pipes
+
+            lowercase
+            uppercase
+            titlecase
+            number
+            currency
+            date
+            json
+            async
+
+        custom pipe
+
+            ng g pipe PipeName --skip-tests
+
+            @Pipe({
+                name:"pipe-name"
+            })
+            export class PipeName implements PipeTransform {
+                transform(value:any,args:any){
+                    //wrtie code to tranform the given value into a different value
+                }
+            }
+    
