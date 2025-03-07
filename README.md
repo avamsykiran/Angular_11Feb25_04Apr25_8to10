@@ -643,4 +643,12 @@ Angular
                 }
             }
     
-    
+    Amgular Services
+    -------------------------------------------------------
+
+        A Service is a class the provides bussiness logic or rest-api calls
+        to be injected into any other resource.
+
+        ng g service ServiceName --skip-tests
+
+        
