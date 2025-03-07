@@ -1,0 +1,9 @@
+.centered{
+    display: block;
+    margin: auto;
+}
+
+.bordered{
+    border: 3px solid #aa4444;
+    border-radius: 10px;
+}

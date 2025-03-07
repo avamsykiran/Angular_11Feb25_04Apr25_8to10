@@ -1,0 +1,50 @@
+<section class="card border-dark m-4 p-4">
+    <h4>String Related Pipes</h4>
+    <div>
+        <div><strong>Original: </strong> {{str}}</div>
+        <div>{{str|lowercase}}</div>
+        <div>{{str|uppercase}}</div>
+        <div>{{str|titlecase}}</div>        
+    </div>
+
+    <h4>Number Pipe</h4>
+    <div>
+        <div><strong>Original: </strong> {{num}}</div>
+        <div>{{num|number:"1.0-0"}}</div>        
+        <div>{{num|number:"3.0-0"}}</div>        
+        <div>{{num|number:"3.1-2"}}</div>        
+        <div>{{num|number:"3.1-1"}}</div>        
+    </div>
+
+    <h4>Currency Pipe</h4>
+    <div>
+        <div><strong>Original: </strong> {{num}}</div>
+        <div>{{num|currency:"INR"}}</div>        
+        <div>{{num|currency:"USD"}}</div>        
+        <div>{{num|currency:"GBP"}}</div>        
+        <div>{{num|currency:"JPY"}}</div>        
+        <div>{{num|currency:"AUD"}}</div>        
+        <div>{{num|currency:"XYZ"}}</div>                
+    </div>
+
+    <h4>Date Pipe</h4>
+    <div>
+        <div><strong>Original: </strong> {{dt}}</div>
+        <div>{{dt|date:"short"}}</div>                
+        <div>{{dt|date:"long"}}</div>               
+        <div>{{dt|date:"dd"}}</div>                
+        <div>{{dt|date:"dd-MM"}}</div>                
+        <div>{{dt|date:"dd-MMM-yy"}}</div>                
+        <div>{{dt|date:"dd-MMMM-yyyy"}}</div>                
+        <div>{{dt|date:"dd-MM-yy hh:mm:ss aa"}}</div>                 
+        <div>{{dt|date:"dd-MM-yy HH:mm:ss"}}</div>                 
+    </div>
+
+    <h4>Custom Pipe - IntoWords </h4>
+    <div>
+        <div><strong>Original: </strong> {{num}}</div>
+        <div>{{num|intoWords}}</div>
+        <div>{{1024|intoWords}}</div>
+        <div>{{1024.098|intoWords}}</div>
+    </div>
+</section>

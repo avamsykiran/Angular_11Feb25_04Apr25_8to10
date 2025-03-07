@@ -1,0 +1,25 @@
+<section class="card border-dark m-4 p-4">
+    <h4>My Friends</h4>
+
+    <div class="border boder-dark p-4">
+        @for(friend of friends;track $index;let i=$index){
+            <span class="badge bg-primary m-1 p-2 d-inline-flex bg-dark text-light"> 
+                {{friend}} <i role="button" class="bi bi-x-circle-fill ms-2" (click)="del(i)"></i>
+            </span>
+        }@empty {
+            <strong> No Friends To Display</strong>
+        }
+    </div>
+
+    <form class="row p-4 m-4" (ngSubmit)="add()">
+        <div class="col-3">
+            <label>Friend Name</label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="fnmTB" [(ngModel)]="friendName" />
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary">ADD</button>
+        </div>
+    </form>
+</section>

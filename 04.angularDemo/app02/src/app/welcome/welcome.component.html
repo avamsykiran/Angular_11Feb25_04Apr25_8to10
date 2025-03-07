@@ -1,0 +1,39 @@
+<section class="card border-dark m-4 p-4">
+    <div>
+        <img [src]="banners[bIndex]" [style.width.px]="bWidth" (click)="changeIndex()" [ngClass]="bClasses" />
+    </div>
+
+    <p>
+        Hello <strong>{{userName}}</strong>!
+        Hope you are doing well. We are happy to welcome to our new angular SPA.
+    </p>
+
+    <hr />
+
+    <form>
+        <div>
+            <label> Banner Width:   
+                <input type="range" name="r1" [(ngModel)]="bWidth" min="100" max="500" />
+                {{bWidth}} px
+            </label>
+            <label> 
+                <input type="checkbox" name="cb1" [(ngModel)]="bClasses.centered" />
+                Align Center
+            </label>
+            <label> 
+                <input type="checkbox" name="cb2" [(ngModel)]="bClasses.bordered" />
+                Apply Border
+            </label>
+        </div>
+        <div>
+            <label>Your Name Please: </label>
+            <input name="tb1" [(ngModel)]="userName" />
+        </div>
+    </form>
+
+    <section class="m-4 p-4 border border-dark">
+        <p appHighlight> This is a test para</p>
+        <div appHighlight="#0000ff"> This is a test div.</div>
+        <section [appHighlight]="{fgColor:'#ffffff',bgColor:'#ff0000'}"> This is a test section.</section>
+    </section>
+</section>
