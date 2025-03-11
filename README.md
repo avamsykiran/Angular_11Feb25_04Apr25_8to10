@@ -651,4 +651,44 @@ Angular
 
         ng g service ServiceName --skip-tests
 
-        
+    Angular Forms
+    --------------------------------------------------------
+
+        Angular supports two types of forms
+
+        Template Driven Forms
+
+            are constructred in html
+            and are bound to fields using ngModel directiove
+            from FormsModule
+
+            FormsModule
+                ngForm
+                ngModel
+
+                and a few validation related properties
+
+            These forms can not accomidate complicated object structures
+            like arrays or nested objects.
+
+            These forms are not easy to tests as well.
+
+            These forms are recommended to handle a case that has not more
+            then two fields.
+
+        Reactive Forms (Model Driven Forms)
+
+            ReactiveFormsModule
+                FormControl
+                FormGroup
+                FormBuilder
+
+            These forms are built for any complicated object structure.
+            These forms are built on component class and are bound
+            to the html dom.
+
+            Testing these form easy. 99% we use these forms in angular. Validation
+            related properties
+
+            FormGroup       valid,invalid
+            FormControl     valid,invalid,touched,untouched,pristine,dirty
