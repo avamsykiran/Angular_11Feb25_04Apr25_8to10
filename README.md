@@ -692,3 +692,95 @@ Angular
 
             FormGroup       valid,invalid
             FormControl     valid,invalid,touched,untouched,pristine,dirty
+
+    Angular Signals
+    -------------------------------------------------------------------
+
+        A signal is wrapper around a value, that notifies the consumers
+        when the value changes.
+
+        A consumer is any resource that is listening to the signal.
+
+            WritableSignal
+
+                are signals whose value can be modfiied.
+
+                const count : WritableSignal<number> = signal(0);
+
+                console.log(count());
+
+                count.set(10);                      //to reset the value of a signal
+
+                count.update( value => value+1 );   //will modify the value based on the prev.
+
+            ComputedSignal
+
+                are signals that are computed based on another signal.
+
+                const tax: Signal<number> = computed( () => count() * 0.10 );
+
+            Effects
+
+                an effect is to execute a function when any signal is modified.
+
+                effect(() => {
+                    //code written here is executed when ever any signal gets modified.
+                });
+
+    RxJS Observables
+    -------------------------------------------------------------------
+
+        RxJS reactive-JavaScript    is a library designed for reactive programming.
+
+        reactive programming is to react to an event that occurs from an
+        asynchronous operation.
+
+        cosnt bgJob = (observer) => {
+            //we can code our asynchonous time consuming operation.
+            //we can call observer.next(val) to emit a value amid the operation
+            //we can call observer.complete() to signal the completion of the operation
+            //we can call observer.error(errMsg) to signla an error in the operation
+        };
+        
+        let ob = new Observable(bgJob);
+
+        //on calling subscribe, the bgJOb is invoked.
+        ob.subscribe({
+            next:   val => { /*we can do somethign on the value*/ },
+            complete: () => { /*we can react to the compeltion of the operation*/},
+            error: err => { /*we can react to an error in the operation */}
+        }); 
+
+    HttpClientModule
+    ----------------------------------------------------------------
+
+        this module offer HttpClient that can be used to make api-calls.
+
+        to activate this module, we will have to include its provider 
+        'provideHttpClient()' in app.config.ts file.
+
+        Now we can inject HttpClient into any resource of our application.
+
+        HttpClient
+            |
+            |- get(url) : Observable
+            |- delete(url) : Observable
+            |- post(url,reqBody) : Observable
+            |- put(url,reqBody) : Observable
+
+    JSON-SERVER
+    -----------------------------------------------------------------
+
+        is a thrid party library used to create a fake rest-api.
+
+        to create a fake rest-api app
+            md rest-api
+            cd rest-api
+            npm init -y
+            npm i json-server@0.17.4
+
+            we will create rest-api/data.json with hypothetical data.
+
+        to execute the rest-api
+            json-server --port 9999 --watch ./data.json
+    
