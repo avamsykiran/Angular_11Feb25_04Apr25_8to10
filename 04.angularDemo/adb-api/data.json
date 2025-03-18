@@ -1,0 +1,28 @@
+{
+  "contacts": [
+    {
+      "id": 1,
+      "fullName": "Vamsy",
+      "mobile": "9999999999",
+      "mail": "vamsy@gmail.com"
+    },
+    {
+      "id": 2,
+      "fullName": "KGN Murthy",
+      "mobile": "8888888888",
+      "mail": "kgn@gmail.com"
+    },
+    {
+      "id": 3,
+      "fullName": "Sagar Charan",
+      "mail": "sagar@gmail.com",
+      "mobile": "1111111111"
+    },
+    {
+      "id": 4,
+      "fullName": "Suresh P",
+      "mail": "suresh@gmail.com",
+      "mobile": "7777777777"
+    }
+  ]
+}

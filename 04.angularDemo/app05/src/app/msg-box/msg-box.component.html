@@ -1,0 +1,6 @@
+@if(msg()){
+    <div class="alert p-2 bg-dark text-light alert-dismissable">
+        <button type="button" class="btn-close" (click)="close()"></button>
+        <strong>{{msg()}}</strong>
+    </div>
+}

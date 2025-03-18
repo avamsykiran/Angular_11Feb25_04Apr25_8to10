@@ -1,0 +1,14 @@
+{
+  "name": "adb-api",
+  "version": "1.0.0",  
+  "scripts": {
+    "start": "json-server --port 9090 --watch ./data.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}
