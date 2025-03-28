@@ -784,3 +784,179 @@ Angular
         to execute the rest-api
             json-server --port 9999 --watch ./data.json
     
+    Case Study
+    -----------------------------------------------------------------
+
+        Create an angular based SPA to perform CRUD operations
+        on 'Employee'. It shall consume the rest-api generated using a json-server.
+
+    Angular Environment Variables
+    ------------------------------------------
+
+        ng g environments
+
+        We can create different phases in angular.json as below
+
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
+            },
+            "staging": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "app03:build:production"
+            },
+            "development": {
+              "buildTarget": "app03:build:development"
+            },
+            "staging": {
+              "buildTarget": "app03:build:staging"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+
+        To activate a phase
+
+            ng serve --configuration=staging
+            ng serve --configuration=development
+            ng serve --configuration=production
+
+            ng build --configuration=staging
+            ng build --configuration=development
+            ng build --configuration=production
+
+    Angular State Management using NgRx
+    -----------------------------------------------------------------
+        Store           is a central object that holds all the data related to the application.
+                        generally one appliction will have only one store.                      
+
+        Reducer         is the one that manages the data/state in the store. 
+                        Any initialization / insertion / deletion / modification 
+                        to the state in the store is done by the reducer.
+
+        Selector        is the one that extracts state from the store into a component.
+
+        Action          is an object that represents an operation dispatched by a component 
+                        and to be handled by the reducer. Each action should specify
+                            type        indicates what is the operation
+                            payload     holds data needed to exedcute that operation
+
+                            for example, if type:"DEL_EMP" then empId msut be the payload.
+
+        Effect          is an adapter to execute asynchronous logic liek api-calls and signal the reducer
+
+            Store   -----SELECTOR -------> Component1
+                ↑                           |
+                |                           |
+                |                           |
+                |                           |
+                |                           ACTION
+                |                           ↓
+            REDUCER ←-----------------------|
+                ↑                           ↓
+                EFFECTS ←--------------------
+                |
+                |
+            SERVICE (rest-api calls)
+
+        ng add @ngrx/store
+        ng add @ngrx/effects
+    
+    Angular State Management using NgRx Signal Store
+    -----------------------------------------------------------------
+
+        ng add @ngrx/signals
+
+        Ngrx Signals offers NgRx store with native signals support, that
+        makes managing state globally more simple and reactive.
+
+        export const StoreName = signalStore(
+            {providedIn:'root'},
+            withState(/* initialState "/),
+            withComputed(/* computed proeprties */),            
+            withMethods((store, apiService = inject(APIService)) => ({
+                //define methods to execute api calls from apiService
+            }))
+        );
+
+        withState       is used to provided initial data into the store
+                        each field/property of the inital data is going to be a Signal.
+
+        withComputed    is used to provide computed signals as fields to the store                    
+                        it accepts a callback having current-state as param and that callBack msut return a json object of computed signals.
+
+        withMethods     is used top add methods (actions) to the store
+
+                interface ArthStoreType {
+                    x: number;
+                    y: number;
+                }     
+
+                const initialData : ArthStoreType = { x:0, y:0 };
+
+                export const ArthStore = signalStore(
+                    {providedIn:'root'},
+                    withState(initialData),
+                    withComputed(({x,y}) => ({
+                        sum: computed( () => x() + y() ),
+                        dif: computed( () => x() - y() ),
+                        prd: computed( () => x() * y() )
+                    })),            //similar to selectors
+                    withMethods((store) => ({
+                        changeX(x){
+                            patchState(store,{x})
+                        },
+                        changeY(y){
+                            patchState(store,{y})
+                        },
+                    }))             //is a combiantion of actions, reducers and effects
+                );
+
+                /*                            
+                ArthStore.x()   is a signal<number>
+                ArthStore.y()   is another signal<number>
+                ArthStore.sum() is a computed signal<number>
+                ArthStore.dif() is a computed signal<number>
+                ArthStore.prd() is a computed signal<number>
+                ArthStore.changeX(10);
+                ArthStore.changeY(50);  is similar to dispatching an action
+                */
