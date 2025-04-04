@@ -1,12 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ContactsService } from '../services/contacts.service';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { ContactActions } from '../state/contacts.actions';
-import { Observable } from 'rxjs';
+import { ContactsStore } from '../services/contacts.store';
 import { Contact } from '../models/contact';
-import { selectContacts } from '../state/contacts.selectors';
 
 @Component({
   selector: 'app-contact-form',
@@ -16,6 +12,8 @@ import { selectContacts } from '../state/contacts.selectors';
   styleUrl: './contact-form.component.css'
 })
 export class ContactFormComponent {
+
+  store = inject(ContactsStore);
 
   @Input()
   id!:string;
@@ -28,11 +26,7 @@ export class ContactFormComponent {
   mobileFC:FormControl;
   mailFC:FormControl;
 
-  contacts$:Observable<Contact[]>;
-
-  constructor(private store:Store,private router:Router){
-
-    this.contacts$ = this.store.select(selectContacts);
+  constructor(private router:Router){
 
     this.idFC = new FormControl(0,[Validators.required]);
     this.fullNameFC= new FormControl("",[Validators.required,Validators.minLength(5),Validators.maxLength(20)]);
@@ -49,23 +43,21 @@ export class ContactFormComponent {
 
   ngOnChanges(){
     if(this.id){
-      this.contacts$.subscribe({
-        next: contacts => {
-          let c = contacts.find(cx => cx.id===Number(this.id));
-          this.contactForm.reset(c);
-          this.isEditing=true;
-        }
-      })
+      this.store.selectContactId(Number(this.id));
+      this.contactForm.reset({...this.store.selectedContact()});
+      this.isEditing=true;
     }
   }
 
   formSubmitted(){
-    if(this.isEditing){
-      this.store.dispatch(ContactActions.update(this.contactForm.value));      
-    }else{
-      this.store.dispatch(ContactActions.add(this.contactForm.value));
-    }
-    this.router.navigateByUrl("/contacts");
+    let p:Promise<void> = this.isEditing ? 
+      this.store.update(this.contactForm.value) : 
+      this.store.add(this.contactForm.value) ;
+    
+    p.then(
+      () => this.router.navigateByUrl("/contacts")
+    );
+    
   }
 
 }

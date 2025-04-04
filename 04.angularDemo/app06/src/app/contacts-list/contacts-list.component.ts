@@ -1,30 +1,33 @@
 import { Component, computed, Signal } from '@angular/core';
 import { Contact } from '../models/contact';
-import { ContactsService } from '../services/contacts.service';
 import { RouterLink } from '@angular/router';
-import { MsgBoxComponent } from '../msg-box/msg-box.component';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectContacts, selectErrMsg } from '../state/contacts.selectors';
+import { ContactActions } from '../state/contacts.actions';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-contacts-list',
-  imports: [RouterLink, MsgBoxComponent],
+  imports: [RouterLink, CommonModule],
+  standalone:true,
   templateUrl: './contacts-list.component.html',
   styleUrl: './contacts-list.component.css'
 })
 export class ContactsListComponent {
+  contacts$ : Observable<Contact[]>;
+  errMsg$ : Observable<string|null>;
 
-  contacts:Signal<Contact[]>;
-  isEmpty:Signal<boolean>;
-
-  constructor(private cs:ContactsService){
-    this.contacts=this.cs.getAllContacts();
-    this.isEmpty=computed( () => !this.contacts() || this.contacts().length===0 );
+  constructor(private store:Store){
+    this.contacts$ = store.select(selectContacts);
+    this.errMsg$ = store.select(selectErrMsg);
   }
 
   ngOnInit(){
-    this.cs.loadData();
+    this.store.dispatch(ContactActions.load());
   }
-
+  
   del(id:number){
-    this.cs.removeContactById(id);    
+    this.store.dispatch(ContactActions.delete({id}));
   }
 }
