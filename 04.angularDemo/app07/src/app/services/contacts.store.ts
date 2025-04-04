@@ -87,4 +87,4 @@ export const ContactsStore = signalStore(
             }
         }
     })
-);
+));

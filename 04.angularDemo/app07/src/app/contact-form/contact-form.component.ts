@@ -56,8 +56,18 @@ export class ContactFormComponent {
     
     p.then(
       () => this.router.navigateByUrl("/contacts")
-    );
-    
+    );    
   }
 
+  /*
+  async formSubmitted(){
+    if(this.isEditing){
+      await this.store.update(this.contactForm.value);
+    } else{
+      await this.store.add(this.contactForm.value);
+    }
+    
+    this.router.navigateByUrl("/contacts");    
+  }
+ */
 }
