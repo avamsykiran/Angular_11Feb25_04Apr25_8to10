@@ -1,0 +1,55 @@
+<section class="col-sm-5 mx-auto p-4">
+    <h4>Contact Form</h4>
+
+    <form [formGroup]="contactForm" (ngSubmit)="formSubmitted()">
+        <div class="m-2">
+            <label>Contact Id</label>
+            <input type="text" class="form-control" formControlName="id" [readOnly]="true" />
+        </div>
+        <div class="m-2">
+            <label>Full Name</label>
+            <input type="text" class="form-control" formControlName="fullName" />
+            @if(fullNameFC.invalid && (fullNameFC.touched || fullNameFC.dirty)){
+            <div class="alert alert-danger p-2">
+                @if(fullNameFC.errors!["required"]){
+                <span>This field is mandatory</span>
+                }
+                @if(fullNameFC.errors!["minlength"] || fullNameFC.errors!["maxlength"]){
+                <span>Full Name must be between 5 and 20 chars in length</span>
+                }
+            </div>
+            }
+        </div>
+        <div class="m-2">
+            <label>Mobile</label>
+            <input type="text" class="form-control" formControlName="mobile" />
+            @if(mobileFC.invalid && (mobileFC.touched || mobileFC.dirty)){
+            <div class="alert alert-danger p-2">
+                @if(mobileFC.errors!["required"]){
+                <span>This field is mandatory</span>
+                }
+                @if(mobileFC.errors!["pattern"]){
+                <span>Mobile number must be a 10 digit number</span>
+                }
+            </div>
+            }
+        </div>
+        <div class="m-2">
+            <label>Mail Id</label>
+            <input type="text" class="form-control" formControlName="mail" />
+            @if(mailFC.invalid && (mailFC.touched || mailFC.dirty)){
+            <div class="alert alert-danger p-2">
+                @if(mailFC.errors!["required"]){
+                <span>This field is mandatory</span>
+                }
+                @if(mailFC.errors!["email"]){
+                <span>Mail ID msut be a valid email id.</span>
+                }
+            </div>
+            }
+        </div>
+        <div class="m-2 d-grid">
+            <button class="btn btn-primary" [disabled]="contactForm.invalid">SAVE</button>
+        </div>
+    </form>
+</section>
