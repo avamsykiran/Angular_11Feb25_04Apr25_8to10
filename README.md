@@ -960,3 +960,27 @@ Angular
                 ArthStore.changeX(10);
                 ArthStore.changeY(50);  is similar to dispatching an action
                 */
+
+    Router Gaurds 
+    ----------------------------------------------------------------------------
+
+        Router Guards are used to protect routes. Router Guards are functions/interfaces that
+        execute a logic and grant permission for a route to work.
+
+        ng g guard guards/guard-name
+
+        Types
+            CanActivate             check if a route can be activated (work) or not
+                                    interface CanActivate
+                                    CanActivateFn
+
+            CanActivateChild        check if all-child routes of a route can be activated (work) or not
+            CanDeactivate           check if the current-route can be left or not            
+            CanLoad                 check if a route can be loaded or not (if it is configed for lazy-loading)
+            Resolve                 is used to fetech data before a route is activated
+            CanMatch                check if a route can be matched or not
+
+        
+
+    Interceptors
+    ----------------------------------------------------------------------------
