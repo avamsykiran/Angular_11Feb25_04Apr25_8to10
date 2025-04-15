@@ -20,7 +20,7 @@ export const AuthStore = signalStore(
     //computed signals play the role of selectors 
     withComputed(
         ({ currentUser }) => ({            
-            isAuthenticated: computed(() => !(currentUser===null))
+            isAuthenticated: computed(() => (currentUser()!==null))
         })
     ),
 

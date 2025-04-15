@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { allowAuthenticatedUsersOnlyGuardGuard } from './guards/allow-authenticated-users-only-guard.guard';
 
 export const routes: Routes = [
-    {path:'',pathMatch:'full',redirectTo:"/contact"},
+    {path:'',pathMatch:'full',redirectTo:"/contacts"},
     {path:'contacts',component:ContactsListComponent},
     {path:'addContact',component:ContactFormComponent, canActivate:[allowAuthenticatedUsersOnlyGuardGuard]},
     {path:'editContact/:id',component:ContactFormComponent, canActivate:[allowAuthenticatedUsersOnlyGuardGuard]},

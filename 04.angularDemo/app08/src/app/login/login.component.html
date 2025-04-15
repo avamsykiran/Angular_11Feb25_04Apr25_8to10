@@ -1,1 +1,37 @@
-<p>login works!</p>
+<section class="col-sm-5 mx-auto p-4">
+    <h4>Login</h4>
+
+    @if(store.errMsg()){
+    <div class="alert alert-danger p-2 fw-bold">
+        <span>{{store.errMsg()}}</span>
+    </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="formSubmitted()">
+        <div class="m-2">
+            <label>User Name</label>
+            <input type="text" class="form-control" formControlName="username" />
+            @if(userNameFC.invalid && (userNameFC.touched || userNameFC.dirty)){
+            <div class="alert alert-danger p-2">
+                @if(userNameFC.errors!["required"]){
+                <span>This field is mandatory</span>
+                }
+            </div>
+            }
+        </div>
+        <div class="m-2">
+            <label>Password</label>
+            <input type="password" class="form-control" formControlName="password" />
+            @if(passwordFC.invalid && (passwordFC.touched || passwordFC.dirty)){
+            <div class="alert alert-danger p-2">
+                @if(passwordFC.errors!["required"]){
+                <span>This field is mandatory</span>
+                }
+            </div>
+            }
+        </div>
+        <div class="m-2 d-grid">
+            <button class="btn btn-primary" [disabled]="loginForm.invalid">LOG IN</button>
+        </div>
+    </form>
+</section>

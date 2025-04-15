@@ -3,8 +3,8 @@ Angular
 
     Objectives : 
     1. Core Concepts like standalone APIs, Component-based architecture, Directives, DI, Forms, Pipes, Lifecycle hooks etc.
-    2. Also, need to cover on new features that got introduced post Angular 17+ like View Transitions API, Signal based State Management, Deferrable Views, Control flow, SSR, ESBuild, Zoneless Angular etc.
-    3. Advanced Angular Features like Component Communication, Content Projection, State Management, Unit testing, end-to-end testing etc.
+    2. Also, need to cover on new features that got introduced post Angular 17+ like View Transitions API, Signal based State Management, Deferrable Views, Control flow, SSR,  Zoneless Angular etc.
+    3. Advanced Angular Features like Component Communication, Content Projection, State Management
     4. Performance
     5. Full-stack API Integration
 
@@ -980,7 +980,307 @@ Angular
             Resolve                 is used to fetech data before a route is activated
             CanMatch                check if a route can be matched or not
 
-        
-
     Interceptors
     ----------------------------------------------------------------------------
+
+        An interceptor is a piece of code triggered before a http-client-req leaves
+        our application.
+
+        ng g interceptor InterceptorName --skip-tests
+
+        config:
+            provideHttpClient({
+                withInterceptors([interceptro1,interceptor2...])
+            })
+
+        a. Auditing out going requests
+        b. adding headers (authenticatioon token) to an out going req
+        c. changing the format of data of an incoming resp
+
+        are a few contexts where interceptors are used.
+
+    Angular App Performence Enhancers
+    -----------------------------------------------------
+
+        1. Zoneless Change Detection and Change Detection Strategies / Modes
+
+                Zone.js is the library used by Angular NgZone module to perform change detection.
+
+                    The change Detection happens at a scheduled interval of time by NgZone from
+                    top to bottom on the component tree in depth-first-search pattern.
+
+                        app.component
+                            |
+                            ----------------
+                            |              |
+                            Component1     Component2
+                                |
+                                Component1ChildComponent
+
+                    Zone.js offers two modes of Change Detection or two strategies of change detection
+                        (a) Default                        
+                        (b) OnPush
+
+                    In 'Default' stratagy each and every component is checked for changes in the field of the component, and
+                    as and when a change is detected the entire hirarchy of components from that detected component will be re-rendred.
+
+                    We can skip a component from being checked for changes continouly, by marking its changeDetection:'OnPsuh'.
+                        These components are verified for changes only when it is marked as 'dirty'.
+                        A component is marked 'dorty' when
+                            (1) any input-bound fields change
+                            (2) ChangeDetectionRef.markForCheck() is invoked
+                            (3) any state change happend on the ViewChildren
+                            (4) Any chagnes happen to the ContentChildren
+
+                Zone.js is a overhead on the application bundle and also keeps the dubuging stack trace filled with
+                change detection calls.
+
+                And here ZoneLess Change Detection comes into picture. Angular 18 has introduced an experimental 
+                change detection strategy called zone-less-change-detection.
+
+                In this case, the scheduling of continous change detection will not happen. Rather each component has a 
+                nativly designed ChangeDetector that signals the Rendering engine every time a change happens to the state
+                of the component. We do not need Zone.js anymore.
+
+                To activate zone-less-change-detection, in app.config.ts,
+                    replace
+                        provideZoneChangeDetection({ eventCoalescing: true })
+                    with
+                        provideExperimentalZonelessChangeDetection()
+
+        2. Defered Loading
+
+            Allows to load a time-consuming component lately.
+
+            ComponentA  is the parent of ComponentB.
+
+            component-a.template.html
+
+                <app-component-b></app-component-b>
+
+            If ComponentB is a huge component with lots of heavy javascript to execute, it delays the rendering of ComponentA as well.
+
+            ComponentB can be loaded lately to avoid the delay of ComponentA using @defer block
+                
+            component-a.template.html
+                <div> this will be rendered</div>
+                @defer {
+                    <!-- this will be rendered only when the browser is idle -->
+                    <app-component-b></app-component-b>
+                }
+                <div> this will be rendered</div>
+
+            All the template of ComponentA will be loaded but not ComponentB until 'browser is idle'.
+
+            Placeholder block
+
+                component-a.template.html
+                    <div> this will be rendered</div>
+                    @defer {
+                        <!-- this will be rendered only when the browser is idle -->
+                        <app-component-b></app-component-b>
+                    } @placeholder {
+                        <div> this will be rendered alogn with the rest of the tempalte and disapperas once the defer block loads </div>
+                    }
+                    <div> this will be rendered</div>
+            
+            Placeholder block with minimum display time
+
+                component-a.template.html
+                    <div> this will be rendered</div>
+                    @defer {
+                        <!-- this will be rendered only when the browser is idle -->
+                        <app-component-b></app-component-b>
+                    } @placeholder(minimum 300ms) {
+                        <div> this will be rendered along with the rest of the tempalte and disapperas once the defer block loads </div>
+                    }
+                    <div> this will be rendered</div>
+
+            Loading Block
+                component-a.template.html
+                    <div> this will be rendered</div>
+                    @defer {
+                        <!-- this will be rendered only when the browser is idle -->
+                        <app-component-b></app-component-b>
+                    } @loading {
+                        <div> 
+                            this will be rendered once the defered block starts 
+                            loading and disappears after the defered block
+                            completes loading 
+                        </div>
+                    } @placeholder {
+                        <div> this will be rendered alogn with the rest of the tempalte and disapperas once the defer block loads </div>
+                    }
+                    <div> this will be rendered</div>
+
+            Error Block
+                component-a.template.html
+                    <div> this will be rendered</div>
+                    @defer {
+                        <!-- this will be rendered only when the browser is idle -->
+                        <app-component-b></app-component-b>
+                    } @error {
+                        <div> 
+                            this will be rendered if ComponentB could not be loaded or encounters an error.
+                        </div>
+                    } @loading {
+                        <div> 
+                            this will be rendered once the defered block starts 
+                            loading and disappears after the defered block
+                            completes loading 
+                        </div>
+                    } @placeholder {
+                        <div> this will be rendered alogn with the rest of the tempalte and disapperas once the defer block loads </div>
+                    }
+                    <div> this will be rendered</div>
+
+            Defered Block Triggers
+
+                triggers will decide when shall the loading of the defer start.
+
+                @defer(on idle){
+                    <!-- the defered block to load only when the browser is idle, adn this is the default-->
+                    <huge-component></huge-component>
+                }
+
+                @defer(on immediate){
+                    <!-- the defered block to load immidiately after the rendering all non-defered content-->
+                    <huge-component></huge-component>
+                }
+
+                @defer(on viewport){
+                    <!-- the defered block to load after the placeholder block is scrolled into-->
+                    <huge-component></huge-component>
+                }
+                
+                @defer(on interaction){
+                    <!-- the defered block to load after the placeholder block is clicked-->
+                    <huge-component></huge-component>
+                }
+                
+                @defer(on hover){
+                    <!-- the defered block to load after the placeholder block is hovered-->
+                    <huge-component></huge-component>
+                }
+
+                @defer(on timer(timeInMilliSecs)){
+                    <!-- the defered block to load after the mentioned delay time-->
+                    <huge-component></huge-component>
+                }
+
+                @defer(when condition){
+                    <!-- the defered block to load once the condition is true for the first-->
+                    <huge-component></huge-component>
+                }
+
+    Dynamic Component Loading
+    -------------------------------------------------------
+        dynamic component loading is to load a component into its parent's template
+        on the fly or at runtime. NgComponentOutlet directive to facilitate dynamic 
+        component loading.
+
+        parent.template.html
+
+            <ng-container *ngComponentOutlet="componentRef">
+            </ng-container>
+
+            <button (click)="toggle()">Toggle</button>
+
+        parent.component.ts
+
+            @Component({
+                /*all the required meta-properties*/
+            })
+            export class ParentComponent{
+                componentRef:Type<any>; //Type from @angular/core is the base type of any component
+                index:number=0;
+                childComponents:Type>any>[];
+
+                constructor(){
+                    this.childComponents = [
+                        FirstChildComponent,
+                        SecondChildComponent,
+                        ThridChildComponent
+                    ];
+                }
+
+                toggle(){
+                    this.componentRef = this.childComponents[this.index];
+                    this.index++;
+                    if(index===this.childComponents.length){
+                        this.index=0;
+                    }
+                }
+            }
+
+    Server Side Rendering and Server Side Generation (SSR and SSG)
+    --------------------------------------------------------------------------
+
+        Angular 18 offers hybrid content management.
+
+        Client Side Generation / Client Side Rendering
+            The html content can be generated dynamically on the client
+
+        Server Side Generation
+            The html content is generated at the build time as static html files
+            and are loaded on to the client providing improve start-time and load-time
+            of the application. This also enhances SEO.
+
+        Server Side Rendering
+            The html content is generated on the server at the run time and is provided
+            to the client. This offers support for users having low network band-width and
+            also enhances SEO.
+
+        When we work with component that follow SSR / SSG, we have to remember that objects like window/ document ...etc., are not available.
+
+        Similarly, components that render on the client can not have access to file-system or request or response objects unlike components that render on server side.
+
+        Hydration
+            is a technique introduced in angualr to ensure duplicate generation of DOM is not happening.
+
+        Scenarios to decide on the mode of generation
+
+            NavBarComponent     assuming is a component that offers navigation links.
+                                and these links may change while user logins or logout.
+                                This is a component best suited for SSR.
+
+            MessageBoxComponent assuming is a component that has to display messages dynamically.
+                                This is a component best suited for client side rendering
+
+            HomeComponent       assuming is a component that has a brand logo and a login form.
+                                this is a componetn best suited for SSG.
+
+        While creating a new app, SSR and SSG can be enabled on the project wizrd.
+
+        To enable ssr and ssg on an existing app,
+            
+            ng add @angular/ssr
+
+        app-root
+            |-server.ts                     nodJs based expressjs application server
+            |-src
+                |-main.server.ts            server bootstraping
+                |-app
+                    |-app.config.server.ts  server side configs
+                    |-app.routes.server.ts  declare server side routes
+
+        to enable hydration in app.config.ts,   provideClientHydration()
+
+        to define the rendering mode of a path, in app.routes.server.ts
+
+            export const serverRoutes: ServerRoute[] = [
+                { path: "ssr", renderMode: RenderMode.Server },
+                { path: "ssg", renderMode: RenderMode.Prerender },
+                { path: "csr", renderMode: RenderMode.Client },
+            ];
+
+        and , in app.routes.ts
+
+            export const routes: Route[] = [
+                { path: "ssr", component:Component1 },
+                { path: "ssg", component:Component2 },
+                { path: "csr", component:Component3 },
+            ];
+
+        and, in app.config.server.ts    provideServerRoutesConfig(serverRoutes)
+        and, in app.config.ts   provideRouter(routes)
